@@ -15,6 +15,7 @@ jobs:
           - vmagent
           - victoria-server
           - vmalert
+          - victoria-logs
 
     steps:
       # Шаг 1: Клонировать репозиторий

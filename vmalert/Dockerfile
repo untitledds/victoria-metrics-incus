@@ -1,5 +1,5 @@
 # Базовый образ
-FROM victoriametrics/vmalert:v1.94.0
+FROM victoriametrics/vmalert:v1.114.0
 
 # Копируем entrypoint.sh в контейнер
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

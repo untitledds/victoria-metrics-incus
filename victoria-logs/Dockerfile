@@ -1,5 +1,5 @@
 # Базовый образ
-FROM victoriametrics/victoria-metrics:v1.114.0
+FROM victoriametrics/victoria-logs:v1.17.0-victorialogs
 
 # Копируем entrypoint.sh в контейнер
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
