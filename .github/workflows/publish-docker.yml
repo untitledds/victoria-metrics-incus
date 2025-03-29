@@ -17,7 +17,17 @@ jobs:
           - vmalert
 
     steps:
-      # Шаг 1: Вход в GitHub Container Registry
+      # Шаг 1: Клонировать репозиторий
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # Шаг 2: Вывести структуру репозитория
+      - name: List files in the repository
+        run: ls -R
+
+      # Шаг 3: Выполнить вход в GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -25,23 +35,23 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Шаг 2: Извлечение имени ветки или тега
+      # Шаг 4: Извлечь имя ветки или тега
       - name: Extract branch or tag name
         id: extract_branch
         run: echo "branch_name=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//-/g')" >> $GITHUB_ENV
 
-      # Шаг 3: Сборка Docker-образа
+      # Шаг 5: Собрать Docker-образ
       - name: Build Docker image
         run: |
           cd ${{ matrix.image }}
           docker build -t ghcr.io/${{ github.repository }}/${{ matrix.image }}:${{ env.branch_name }} .
 
-      # Шаг 4: Пометка образа как latest
+      # Шаг 6: Пометить образ как latest
       - name: Tag Docker image as latest
         run: |
           docker tag ghcr.io/${{ github.repository }}/${{ matrix.image }}:${{ env.branch_name }} ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
 
-      # Шаг 5: Публикация образа
+      # Шаг 7: Опубликовать образ
       - name: Push Docker image
         run: |
           docker push ghcr.io/${{ github.repository }}/${{ matrix.image }}:${{ env.branch_name }}
